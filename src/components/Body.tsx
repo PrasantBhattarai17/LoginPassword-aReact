@@ -2,6 +2,7 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity
 import React, { useState } from 'react';
 import * as Yup from "yup";
 import { Formik } from 'formik';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 export default function Body() {
  
   const [password,setPassword]=useState("");
@@ -13,7 +14,7 @@ export default function Body() {
 
   const passwordSChema=Yup.object().shape({
     passwordLength:Yup.number()
-    .min(8,"Should be atleast of 8 letters")
+    .min(4,"Should be atleast of 8 letters")
     .max(16,"should be of max 16 letters")
     .required("should conatain 8 letters")
   });
@@ -91,17 +92,69 @@ export default function Body() {
         handleReset
       }) => (
         <>
+        <View style={styles.boxParent}>
         <View>
         <Text style={styles.EnterColumn}>Enter Password Length:</Text>
-        <TextInput style={styles.Inputcolumn}/>   
+        <TextInput 
+        style={styles.Inputcolumn}  
+        value={values.passwordLength}
+        onChangeText={handleChange('passwordLength')}
+        keyboardType='numeric'
+        placeholder='For Example:7'
+        />   
+        </View>
+
+        <View style={styles.checkboxAll}>
+          <Text style={styles.headingText}>Include Lowercases</Text>
+        <BouncyCheckbox
+        isChecked={lowercase}
+        onPress={()=>setLowercase(!lowercase)}
+        fillColor='blueviolet'
+        />
+        </View>
+        <View style={styles.checkboxAll}>
+          <Text style={styles.headingText}>Include Uppercases</Text>
+        <BouncyCheckbox
+        isChecked={uppercase}
+        onPress={()=>setuppercase(!uppercase)}
+        fillColor='blueviolet'
+        />
+        </View>
+        <View style={styles.checkboxAll}>
+          <Text style={styles.headingText}>Include Special Symbols</Text>
+        <BouncyCheckbox
+        isChecked={symbols}
+        onPress={()=>setSymbols(!symbols)}
+        fillColor='blueviolet'
+        />
+        </View>
+        <View style={styles.checkboxAll}>
+          <Text style={styles.headingText}>Include Numbers</Text>
+        <BouncyCheckbox
+        isChecked={numbers}
+        onPress={()=>setNumbers(!numbers)}
+        fillColor='blueviolet'
+        />
+        </View>
         </View>
         <View style={styles.buttonWrapper}>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}> Generate password</Text></TouchableOpacity>
+          <TouchableOpacity disabled={!isValid} onPress={()=>handleSubmit()} style={styles.button}><Text style={styles.buttonText}> Generate password</Text></TouchableOpacity>
+          <TouchableOpacity onPress={()=>{handleReset()
+            resetPassword()
+          }} style={styles.buttonTwo}><Text style={styles.buttonTextTwo}> Reset</Text></TouchableOpacity>
         </View>
         </>
       )   
     }
     </Formik>
+        {
+          (isGenerated)?<>
+          <View style={styles.result}>
+           <Text style={styles.resultText}>Password:</Text>
+            <Text style={styles.resultText}>{password}</Text>
+          </View>
+          </>:null
+        }
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -128,8 +181,9 @@ Inputcolumn:{
   borderRadius:4,
   elevation:4,
   shadowColor:"black",
-  margin:10
-
+  margin:10,
+  fontSize:16,
+  fontWeight:"bold"
 },
 TextStyle:{
   textAlign:"center",
@@ -146,8 +200,9 @@ textAlign:"center"
 },
 buttonWrapper:{
   width:200,
-  flex:1,
   marginVertical:10,
+  alignItems:"center",
+  gap:20
 },
 button:{
   width:180,
@@ -164,6 +219,51 @@ buttonText:{
   fontWeight:"bold",
   color:"white",
 
+},
+buttonTwo:{
+  width:100,
+  backgroundColor:"red",
+  height:30,
+  justifyContent:"center",
+  alignItems:"center",
+  borderRadius:5,
+  elevation:15,
+  shadowColor:"black"
+},
+buttonTextTwo:{
+  fontSize:18,
+  fontWeight:"bold",
+  color:"white",
+
+},
+checkboxAll:{
+  width:300,
+  flexDirection:"row",
+  justifyContent:"space-between",
+},
+headingText:{
+  fontSize:16,
+  fontWeight:"500"
+},
+boxParent:{
+ gap:10
+},
+result:{
+  marginVertical:20,
+  height:100,
+  width:200,
+  backgroundColor:"blueviolet",
+  borderRadius:8,
+  elevation:10,
+  shadowColor:"black",
+  flexDirection:'column',
+  justifyContent:"center",
+  alignItems:'center'
+},
+resultText:{
+  fontSize:18,
+  fontWeight:"bold",
+  color:"white"
 }
 
 })
