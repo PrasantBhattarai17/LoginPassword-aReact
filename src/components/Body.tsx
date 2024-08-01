@@ -14,8 +14,8 @@ export default function Body() {
 
   const passwordSChema=Yup.object().shape({
     passwordLength:Yup.number()
-    .min(4,"Should be atleast of 8 letters")
-    .max(16,"should be of max 16 letters")
+    .min(8,"Should  atleast  be length of 8 letters")
+    .max(16,"should be of max length 16 letters")
     .required("should conatain 8 letters")
   });
 
@@ -102,6 +102,9 @@ export default function Body() {
         keyboardType='numeric'
         placeholder='For Example:7'
         />   
+        {touched.passwordLength&& errors.passwordLength &&(
+          <Text style={styles.errorText}>{errors.passwordLength}</Text>
+        )}
         </View>
 
         <View style={styles.checkboxAll}>
@@ -177,11 +180,11 @@ formContainer:{
 Inputcolumn:{
   backgroundColor:"white",
   height:50,
-  width:230,
+  width:250,
   borderRadius:4,
   elevation:4,
   shadowColor:"black",
-  margin:10,
+  marginVertical:25,
   fontSize:16,
   fontWeight:"bold"
 },
@@ -240,6 +243,7 @@ checkboxAll:{
   width:300,
   flexDirection:"row",
   justifyContent:"space-between",
+  marginVertical:5
 },
 headingText:{
   fontSize:16,
@@ -264,6 +268,12 @@ resultText:{
   fontSize:18,
   fontWeight:"bold",
   color:"white"
+},
+errorText:{
+  fontSize:16,
+  fontWeight:"bold",
+  color:"red",
+
 }
 
 })
